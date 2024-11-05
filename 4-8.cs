@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mail;
 using System.Runtime.InteropServices;
 
 /*
@@ -30,7 +31,7 @@ using System.Runtime.InteropServices;
  /7 Вычислить сумму чётных элементов.
 
 В задании 8 в текстовом файле хранится текст.
-        /9 Создать новый текстовый файл, каждая строка которого содержит первый символ
+        /8 Создать новый текстовый файл, каждая строка которого содержит первый символ
 соответствующей строки исходного файла.
 */
 
@@ -56,6 +57,7 @@ public struct Toy
 
 class BinaryFile    
 {
+    //4
     public static void FillRandNum(string file, int countNum)
     {
         Random rand = new Random();
@@ -87,6 +89,7 @@ class BinaryFile
         }
     }
 
+    //5
     public static void FillToy(string file)
     {
         using (FileStream fs = new FileStream(file, FileMode.Create))
@@ -131,7 +134,6 @@ class BinaryFile
         }
     }
 
-
     public static void FindToy(string file)
     {
         bool found = false;
@@ -159,7 +161,7 @@ class BinaryFile
             Console.WriteLine("не найдено");
         }
     }
-
+    //6
     public static void FillRandomIntegers(string file, int count)
     {
         Random random = new Random();
@@ -190,5 +192,60 @@ class BinaryFile
             }
         }
         return min+max;
+    }
+    //7
+    public static void FillRandomInt2(string file, int count)
+    {
+        Random random = new Random();
+        using (StreamWriter wr = new StreamWriter(file))
+        {
+            for(int i = 0; i <= count; i++)
+            {
+                wr.Write(random.Next(1, 101));
+                if( i < count - 1)
+                {
+                    wr.Write(' ');
+                }
+            }
+        }
+    }
+
+    public static int SumOfMod2Num(string file)
+    {
+        int sum = 0;
+
+        using (StreamReader read = new StreamReader(file))
+        {
+            string line;
+            while((line = read.ReadLine()) != null)
+            {
+                string[] num = line.Split(' ');
+                foreach(var numberStr  in num)
+                {
+                    if( int.TryParse(numberStr, out int number) && number % 2 == 0)
+                    {
+                        sum += number;
+                    }
+                }
+            }
+            return sum;
+        }
+    }
+
+    //8
+    public static void FirstCharFile(string file, string outputFile)
+    {
+        using (StreamReader reader = new StreamReader(file))
+        using (StreamWriter writer = new StreamWriter(outputFile))
+        {
+            string line;
+            while((line = reader.ReadLine()) != null)
+            {
+                if(line.Length > 0)
+                {
+                    writer.WriteLine(line[0]);
+                }
+            }
+        }
     }
 }
