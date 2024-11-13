@@ -157,7 +157,7 @@ public class TwoDimArr
                 sums += _mtrx[j, i];
                 
             }
-            Console.WriteLine($"сцмма {i+1} = {sums}");
+            Console.WriteLine($"сумма {i+1} = {sums}");
             if(sums > maxSums) 
                 maxSums = sums;
             sums = 0;

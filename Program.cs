@@ -10,38 +10,57 @@ class Program
         try
         {
 
-            Console.WriteLine("Выберите задание (1, 2 или 3): ");
-            int question = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("Введите размерность n (для задания 1 и 2) или n и m (для задания 1): ");
-            int n = 0, m = 0;
-
+            Console.WriteLine($"1: ");
+            int n, m;
+            Console.WriteLine("Введите n и m - для создания размерности матрицы(будет использованно для задания 2): ");
+            string[] line1 = Console.ReadLine().Split(' ');
+            if (!int.TryParse(line1[0], out n) || !int.TryParse(line1[1], out m))
             {
-                Console.Write("Введите количество столбцов (m): ");
-                m = int.Parse(Console.ReadLine());
+                throw new ArgumentException("NaN");
             }
+            
+            Console.Write("Введите строки матрицы через пробел: ");
 
-            n = int.Parse(Console.ReadLine());
-
-            TwoDimArr array = new TwoDimArr(n, m, question);
+            TwoDimArr array = new TwoDimArr(n, m, 1);
             Console.WriteLine("Заполненная матрица:");
             Console.WriteLine(array.ToString());
 
-            if (question == 2)
+
+            int n1, m1;
+            Console.WriteLine("Введите n и m - для создания размерности матрицы: ");
+            string[] line2 = Console.ReadLine().Split(' ');
+            if (!int.TryParse(line2[0], out n1) || !int.TryParse(line2[1], out m1))
             {
-                Console.WriteLine("Суммы элементов столбцов:");
-                array.MaxSumsOfRows();
+                throw new ArgumentException("NaN");
             }
 
-            if (question == 3)
-            {
-                // Создание первого двумерного массива
-                TwoDimArr A = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
-                TwoDimArr B = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
-                TwoDimArr C = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
+            TwoDimArr array2 = new TwoDimArr(n, n, 2);
+            //Console.WriteLine("Суммы элементов столбцов:");
+            array2.FillRandArray();
+            Console.WriteLine(array2);
 
-                Console.WriteLine((A + 4 * B) - ~C);
-            }
+            TwoDimArr array3 = new TwoDimArr(n, n, 3);
+            array3.FillLowTriArray();
+            Console.WriteLine(array3);
+
+            Console.WriteLine("2: ");
+            array.MaxSumsOfRows();
+
+            //int n2, m2;
+            //Console.WriteLine("Введите n и m - для создания размерности матрицы: ");
+            //string[] line3 = Console.ReadLine().Split(' ');
+            //if (!int.TryParse(line3[0], out n2) || !int.TryParse(line3[1], out m2))
+            //{
+            //    throw new ArgumentException("NaN");
+            //}
+
+            Console.WriteLine("3: ");
+            // Создание первого двумерного массива
+            TwoDimArr A = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
+            TwoDimArr B = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
+            TwoDimArr C = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
+
+            Console.WriteLine((A + 4 * B) - ~C);
 
             // Задание 4
             Console.WriteLine("4: ");
