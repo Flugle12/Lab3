@@ -10,7 +10,7 @@ class Program
         try
         {
 
-            Console.WriteLine($"1: ");
+            Console.WriteLine($"\n1:\n");
             int n, m;
             Console.WriteLine("Введите n и m - для создания размерности матрицы(будет использованно для задания 2): ");
             string[] line1 = Console.ReadLine().Split(' ');
@@ -34,16 +34,16 @@ class Program
                 throw new ArgumentException("NaN");
             }
 
-            TwoDimArr array2 = new TwoDimArr(n, n, 2);
+            TwoDimArr array2 = new TwoDimArr(n1, n1, 2);
             //Console.WriteLine("Суммы элементов столбцов:");
             array2.FillRandArray();
             Console.WriteLine(array2);
 
-            TwoDimArr array3 = new TwoDimArr(n, n, 3);
+            TwoDimArr array3 = new TwoDimArr(n1, n1, 3);
             array3.FillLowTriArray();
             Console.WriteLine(array3);
 
-            Console.WriteLine("2: ");
+            Console.WriteLine("\n2:\n");
             array.MaxSumsOfRows();
 
             //int n2, m2;
@@ -54,7 +54,7 @@ class Program
             //    throw new ArgumentException("NaN");
             //}
 
-            Console.WriteLine("3: ");
+            Console.WriteLine("\n3:\n");
             // Создание первого двумерного массива
             TwoDimArr A = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
             TwoDimArr B = new TwoDimArr(new int[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } });
@@ -63,7 +63,7 @@ class Program
             Console.WriteLine((A + 4 * B) - ~C);
 
             // Задание 4
-            Console.WriteLine("4: ");
+            Console.WriteLine("\n4:\n");
             int k;
             Console.WriteLine("введите чисо кратные которому не будут записаны во второй файл: ");
             if (!int.TryParse(Console.ReadLine(), out k))
@@ -80,14 +80,14 @@ class Program
             FilePrint(filteredFile);
 
             //Задание 5
-            Console.WriteLine("5: ");
+            Console.WriteLine("\n5:\n");
             string toyFile = "toys.bin";
             BinaryFile.FillToy(toyFile);
             Console.WriteLine("Поиск игрушки для ребенка трех лет:");
             BinaryFile.FindToy(toyFile);
 
             //// Задание 6
-            Console.WriteLine("6: ");
+            Console.WriteLine("\n6:\n");
             string intFile = "integers.txt";
             BinaryFile.FillRandomIntegers(intFile, 10);
             FilePrintTXT(intFile);
@@ -95,7 +95,7 @@ class Program
             Console.WriteLine("Сумма минимального и максимального элементов: " + sumMinMax);
 
             // Задание 7
-            Console.WriteLine("7: ");
+            Console.WriteLine("\n7:\n");
             string intFile2 = "integers2.txt";
             int numOfNums, numOfNumsInLine;
             Console.WriteLine("Введите 2 чичла - общее количество чисел и количество чисел в строке:");
@@ -109,7 +109,7 @@ class Program
             Console.WriteLine("Сумма четных элементов: " + evenSum);
 
             //// Задание 8
-            Console.WriteLine("8: ");
+            Console.WriteLine("\n8:\n");
             string textFile = "text.txt";
             string firstCharFile = "firstChars.txt";
             BinaryFile.FirstCharFile(textFile, firstCharFile);

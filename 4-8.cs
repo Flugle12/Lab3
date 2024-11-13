@@ -201,11 +201,11 @@ class BinaryFile
             while ((line = reader.ReadLine()) != null)
             {
                 string[] numbers = line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 1; i < numbers.Length; i += 2) // Проходим по четным позициям (индексы 1, 3, 5 и т.д.)
+                for (int i = 1; i < numbers.Length; i += 2)
                 {
                     if (int.TryParse(numbers[i], out int number))
                     {
-                        sum += number; // Суммируем только элементы на четных позициях
+                        sum += number; 
                     }
                 }
             }
