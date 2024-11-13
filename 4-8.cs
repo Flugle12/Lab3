@@ -1,47 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Net.Mail;
-using System.Runtime.InteropServices;
-
-/*
- Задания 4 – 8 выполнить в виде статических методов одного класса, но отдельно от заданий 1-3.
-    В задании 4 бинарные файлы, содержат числовые данные, исходный файл необходимо заполнить 
-случайными данными, заполнение организовать отдельным методом.
-
-        /4 Получить в другом файле последовательного доступа все компоненты исходного файла, кроме 
-тех, которые кратны k.
-
-
-    В задании 5 бинарные файлы содержат величины типа struct, заполнение исходного файла
-необходимо организовать отдельным методом.
-
-        /5 Файл содержит сведения об игрушках: название игрушки, ее стоимость в рублях и возрастные 
-границы (например, игрушка может предназначаться для детей от двух до пяти лет). Получить 
-сведения о том, можно ли подобрать игрушку, любую, кроме мяча, подходящую ребенку трех лет.
-
-
-В задании 6 в текстовом файле хранятся целые числа по одному в строке, исходный файл 
-необходимо заполнить случайными данными, заполнение организовать отдельным методом.
-
-        /6 В файле найти сумму максимального и минимального элементов.
-
-В задании 7 в текстовом файле хранятся целые числа по несколько в строке, исходный файл 
-необходимо заполнить случайными данными, заполнение организовать отдельным методом.
-
- /7 Вычислить сумму чётных элементов.
-
-В задании 8 в текстовом файле хранится текст.
-        /8 Создать новый текстовый файл, каждая строка которого содержит первый символ
-соответствующей строки исходного файла.
-*/
-
+using System.Xml.Serialization;
 
 [Serializable]
 public struct Toy
 {
+    [XmlElement("Name")]
     public string Name;
+
+    [XmlElement("Price")]
     public double Price;
+
+    [XmlElement("MinAge")]
     public int MinAge;
+
+    [XmlElement("MaxAge")]
     public int MaxAge;
 
     public Toy(string name, double price, int minAge, int maxAge)
@@ -50,21 +24,19 @@ public struct Toy
         Price = price;
         MinAge = minAge;
         MaxAge = maxAge;
-
-
     }
 }
 
-class BinaryFile    
+class BinaryFile
 {
-    //4
+    // 4
     public static void FillRandNum(string file, int countNum)
     {
         Random rand = new Random();
         using (FileStream fs = new FileStream(file, FileMode.Create))
         using (BinaryWriter bw = new BinaryWriter(fs))
         {
-            for(int i = 0; i < countNum; i++)
+            for (int i = 0; i < countNum; i++)
             {
                 bw.Write(rand.Next(1, 101));
             }
@@ -73,15 +45,15 @@ class BinaryFile
 
     public static void CopyNonModK(string anotherFile, string file, int k)
     {
-        using (FileStream fs = new FileStream(anotherFile, FileMode.Open))
+        using (FileStream fs = new FileStream(file, FileMode.Open))
         using (BinaryReader reader = new BinaryReader(fs))
-        using (FileStream outputFs = new FileStream(file, FileMode.Create))
+        using (FileStream outputFs = new FileStream(anotherFile, FileMode.Create))
         using (BinaryWriter writer = new BinaryWriter(outputFs))
         {
             while (fs.Position < fs.Length)
             {
                 int num = reader.ReadInt32();
-                if(num % k != 0)
+                if (num % k != 0)
                 {
                     writer.Write(num);
                 }
@@ -89,79 +61,76 @@ class BinaryFile
         }
     }
 
-    //5
+    // 5
     public static void FillToy(string file)
     {
-        using (FileStream fs = new FileStream(file, FileMode.Create))
-        using (BinaryWriter wr = new BinaryWriter(fs))
+        var toys = new List<Toy>();
+
+        while (true)
         {
-            while (true)
+            Console.WriteLine("Введите название игрушки (или 'exit' для завершения):");
+            string name = Console.ReadLine();
+            if (name.ToLower() == "exit")
             {
-                Console.WriteLine("Введите название игрушки (или 'exit' для завершения):");
-                string name = Console.ReadLine();
-                if (name.ToLower() == "exit")
-                {
-                    break; // Завершение ввода
-                }
-
-                Console.WriteLine("Введите стоимость игрушки в рублях:");
-                double price;
-                while (!double.TryParse(Console.ReadLine(), out price))
-                {
-                    Console.WriteLine("Некорректная стоимость. Пожалуйста, введите число.");
-                }
-
-                Console.WriteLine("Введите минимальный возраст (в годах):");
-                int minAge;
-                while (!int.TryParse(Console.ReadLine(), out minAge))
-                {
-                    Console.WriteLine("Некорректный возраст. Пожалуйста, введите целое число.");
-                }
-
-                Console.WriteLine("Введите максимальный возраст (в годах):");
-                int maxAge;
-                while (!int.TryParse(Console.ReadLine(), out maxAge))
-                {
-                    Console.WriteLine("Некорректный возраст. Пожалуйста, введите целое число.");
-                }
-
-                // Запись данных об игрушке в файл
-                wr.Write(name);
-                wr.Write(price);
-                wr.Write(minAge);
-                wr.Write(maxAge);
+                break;
             }
+
+            Console.WriteLine("Введите стоимость игрушки в рублях:");
+            double price;
+            while (!double.TryParse(Console.ReadLine(), out price))
+            {
+                Console.WriteLine("Некорректная стоимость. Пожалуйста, введите число.");
+            }
+
+            Console.WriteLine("Введите минимальный возраст (в годах):");
+            int minAge;
+            while (!int.TryParse(Console.ReadLine(), out minAge))
+            {
+                Console.WriteLine("Некорректный возраст. Пожалуйста, введите целое число.");
+            }
+
+            Console.WriteLine("Введите максимальный возраст (в годах):");
+            int maxAge;
+            while (!int.TryParse(Console.ReadLine(), out maxAge))
+            {
+                Console.WriteLine("Некорректный возраст. Пожалуйста, введите целое число.");
+            }
+
+            // Создание и добавление игрушки в список
+            toys.Add(new Toy(name, price, minAge, maxAge));
+        }
+
+        // Сериализация списка игрушек в XML
+        XmlSerializer serializer = new XmlSerializer(typeof(List<Toy>));
+        using (FileStream fs = new FileStream(file, FileMode.Create))
+        {
+            serializer.Serialize(fs, toys);
         }
     }
+
 
     public static void FindToy(string file)
     {
-        bool found = false;
-
+        XmlSerializer serializer = new XmlSerializer(typeof(List<Toy>)); // Создаем сериализатор для списка игрушек
+        List<Toy> toys;
+        // Открываем файл и десериализуем (превращаем из XML обратно в объекты) список игрушек
         using (FileStream fs = new FileStream(file, FileMode.Open))
-        using (BinaryReader reader = new BinaryReader(fs))
         {
-            while (fs.Position < fs.Length)
-            {
-                string name = reader.ReadString();
-                double price = reader.ReadDouble();
-                int minAge = reader.ReadInt32();
-                int maxAge = reader.ReadInt32();
+            toys = (List<Toy>)serializer.Deserialize(fs); // Десериализуем список игрушек из файла
+        }
 
-                if (minAge <= 3 && maxAge >= 3 && name != "Мяч")
-                {
-                    Console.WriteLine($"Вам подходит игрушка: {name}, Цена {price}");
-                    found = true;
-                }
+        Console.WriteLine("Подходящие игрушки для ребенка трех лет:");
+
+        foreach (var toy in toys)
+        {
+            if (toy.Name.ToLower() != "мяч" && toy.MinAge <= 3 && toy.MaxAge >= 3)
+            {
+                Console.WriteLine($"Название: {toy.Name}, Цена: {toy.Price} рублей");
             }
         }
-
-        if (!found)
-        {
-            Console.WriteLine("не найдено");
-        }
     }
-    //6
+
+    // 6
     public static void FillRandomIntegers(string file, int count)
     {
         Random random = new Random();
@@ -169,7 +138,7 @@ class BinaryFile
         {
             for (int i = 0; i < count; i++)
             {
-                writer.Write(random.Next(1,101));
+                writer.WriteLine(random.Next(1, 101));
             }
         }
     }
@@ -184,64 +153,77 @@ class BinaryFile
             string line;
             while ((line = reader.ReadLine()) != null)
             {
-                if(int.TryParse(line, out int number))
+                if (int.TryParse(line, out int number))
                 {
-                    if(number < min) min = number;
-                    if(number > max) max = number;
+                    if (number < min) min = number;
+                    if (number > max) max = number;
                 }
             }
         }
-        return min+max;
+        Console.WriteLine($"\nmin: {min}\nmax: {max}");
+        return min + max;
     }
-    //7
-    public static void FillRandomInt2(string file, int count)
+
+    // 7
+    public static void FillRandomInt2(string file, int count, int numbersPerLine)
     {
+        Console.WriteLine("Файл: ");
         Random random = new Random();
         using (StreamWriter wr = new StreamWriter(file))
         {
-            for(int i = 0; i <= count; i++)
+            for (int i = 0; i < count; i++)
             {
-                wr.Write(random.Next(1, 101));
-                if( i < count - 1)
+                int r = random.Next(1,101);
+                wr.Write(r);
+                Console.Write($"{r} ");
+
+                if ((i + 1) % numbersPerLine != 0 && i < count - 1)
                 {
-                    wr.Write(' ');
+                    wr.Write(" ");
+                }
+
+                if ((i + 1) % numbersPerLine == 0 && i < count - 1)
+                {
+                    Console.WriteLine();
+                    wr.WriteLine();
                 }
             }
+            Console.WriteLine();
         }
     }
 
     public static int SumOfMod2Num(string file)
     {
         int sum = 0;
-
-        using (StreamReader read = new StreamReader(file))
+        using (StreamReader reader = new StreamReader(file))
         {
             string line;
-            while((line = read.ReadLine()) != null)
+            while ((line = reader.ReadLine()) != null)
             {
-                string[] num = line.Split(' ');
-                foreach(var numberStr  in num)
+                string[] numbers = line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 1; i < numbers.Length; i += 2) // Проходим по четным позициям (индексы 1, 3, 5 и т.д.)
                 {
-                    if( int.TryParse(numberStr, out int number) && number % 2 == 0)
+                    if (int.TryParse(numbers[i], out int number))
                     {
-                        sum += number;
+                        sum += number; // Суммируем только элементы на четных позициях
                     }
                 }
             }
-            return sum;
         }
+        return sum;
     }
 
-    //8
-    public static void FirstCharFile(string file, string outputFile)
+
+    // 8
+    public static void FirstCharFile(string inputFile, string outputFile)
     {
-        using (StreamReader reader = new StreamReader(file))
+        using (StreamReader reader = new StreamReader(inputFile))
         using (StreamWriter writer = new StreamWriter(outputFile))
         {
             string line;
-            while((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()) != null)
             {
-                if(line.Length > 0)
+                if (line.Length > 0)
                 {
                     writer.WriteLine(line[0]);
                 }
